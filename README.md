@@ -1,4 +1,6 @@
-# Orix - Code Quality & Security Scanner
+# Orix - Code Quality & Security Scanner for VS Code
+
+## Download from Visual Studio Marketplace: [orixcode](https://marketplace.visualstudio.com/items?itemName=Orix.orix)
 
 Orix is a powerful VS Code extension that scans your code for security vulnerabilities, AI-generated "slop" code, and vibe-coded traits — helping you maintain clean, secure, and disciplined code.
 
