@@ -1,0 +1,231 @@
+{
+  "name": "orix",
+  "displayName": "Orix - Code Quality & Security Scanner",
+  "description": "Scans for security vulnerabilities, AI-generated slop, and vibe-coded traits. Works on single files or entire workspaces.",
+  "version": "1.1.0",
+  "publisher": "orix",
+  "icon": "media/argus-white.png",
+  "readme": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orixcode"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters",
+    "Other"
+  ],
+  "keywords": [
+    "security",
+    "code quality",
+    "ai slop",
+    "vibe code",
+    "linter"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onView:orix.issuesView",
+    "onView:orix.summaryView"
+  ],
+  "main": "./src/extension.js",
+  "scripts": {
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "orix.scanCurrentFile",
+        "title": "Orix: Scan Current File",
+        "icon": "$(shield)"
+      },
+      {
+        "command": "orix.scanWorkspace",
+        "title": "Orix: Scan Entire Workspace",
+        "icon": "$(search)"
+      },
+      {
+        "command": "orix.showReport",
+        "title": "Orix: Show Full Report",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "orix.clearDiagnostics",
+        "title": "Orix: Clear All Diagnostics",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "orix.toggleAutoScan",
+        "title": "Orix: Toggle Auto-Scan on Save"
+      },
+      {
+        "command": "orix.groupByCategory",
+        "title": "Orix: Group by Category",
+        "icon": "$(list-tree)"
+      },
+      {
+        "command": "orix.groupByFile",
+        "title": "Orix: Group by File",
+        "icon": "$(files)"
+      },
+      {
+        "command": "orix.groupBySeverity",
+        "title": "Orix: Group by Severity",
+        "icon": "$(warning)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "orix-sidebar",
+          "title": "Orix",
+          "icon": "$(eye)"
+        }
+      ]
+    },
+    "views": {
+      "orix-sidebar": [
+        {
+          "id": "orix.issuesView",
+          "name": "Issues"
+        },
+        {
+          "id": "orix.summaryView",
+          "name": "Summary"
+        }
+      ]
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "command": "orix.scanCurrentFile",
+          "group": "orix@1",
+          "when": "editorIsOpen"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "orix.scanWorkspace",
+          "group": "orix@1"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "orix.scanCurrentFile",
+          "group": "navigation",
+          "when": "editorIsOpen"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "orix.scanCurrentFile",
+          "when": "view == orix.issuesView",
+          "group": "navigation@1"
+        },
+        {
+          "command": "orix.scanWorkspace",
+          "when": "view == orix.issuesView",
+          "group": "navigation@2"
+        },
+        {
+          "command": "orix.groupByCategory",
+          "when": "view == orix.issuesView",
+          "group": "navigation@3"
+        },
+        {
+          "command": "orix.groupByFile",
+          "when": "view == orix.issuesView",
+          "group": "navigation@4"
+        },
+        {
+          "command": "orix.groupBySeverity",
+          "when": "view == orix.issuesView",
+          "group": "navigation@5"
+        },
+        {
+          "command": "orix.clearDiagnostics",
+          "when": "view == orix.issuesView",
+          "group": "navigation@6"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Orix",
+      "properties": {
+        "orix.autoScanOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically scan files on save."
+        },
+        "orix.autoScanOnOpen": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically scan files when opened."
+        },
+        "orix.enableSecurity": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable security vulnerability checks."
+        },
+        "orix.enableAISlop": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable AI slop / placeholder code detection."
+        },
+        "orix.enableVibeCode": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable vibe-coded trait detection."
+        },
+        "orix.maxFileSizeKB": {
+          "type": "number",
+          "default": 500,
+          "description": "Maximum file size in KB to scan. Files larger than this are skipped."
+        },
+        "orix.excludePatterns": {
+          "type": "array",
+          "default": [
+            "**/node_modules/**",
+            "**/dist/**",
+            "**/build/**",
+            "**/.git/**",
+            "**/vendor/**",
+            "**/*.min.js",
+            "**/*.bundle.js"
+          ],
+          "description": "Glob patterns to exclude from workspace scans."
+        },
+        "orix.severityThreshold": {
+          "type": "string",
+          "enum": [
+            "error",
+            "warning",
+            "info"
+          ],
+          "default": "info",
+          "description": "Minimum severity level to report. 'error' shows only critical issues."
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "orix.scanCurrentFile",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a",
+        "when": "editorFocus"
+      },
+      {
+        "command": "orix.scanWorkspace",
+        "key": "ctrl+shift+alt+a",
+        "mac": "cmd+shift+alt+a"
+      }
+    ]
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.32.0",
+    "vsce": "^2.15.0"
+  }
+}
